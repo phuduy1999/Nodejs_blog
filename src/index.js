@@ -9,6 +9,8 @@ const port = 3000;
 const route = require('./routes');
 const db = require('./config/db');
 
+const sortMiddleware = require('./app/middlewares/SortMiddleware');
+
 //Connect DB
 db.connect();
 
@@ -28,14 +30,14 @@ app.use(express.json()); //XMLHttpRequest, ajax, hoac submit bang code js,...
 
 app.use(methodOverride('_method'));
 
+app.use(sortMiddleware);
+
 //Template engine
 app.engine(
     '.hbs',
     handlebars({
         extname: '.hbs',
-        helpers: {
-            sum: (a, b) => a + b,
-        },
+        helpers: require('./helpers/handlebars')
     }),
 );
 app.set('view engine', '.hbs');
